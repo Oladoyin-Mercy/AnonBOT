@@ -1,4 +1,5 @@
 import assert from 'assert';
+import { webcrypto as crypto } from 'node:crypto';
 
 console.log('🧪 Starting AnonBOT Unit & Integrity Test Suite...');
 

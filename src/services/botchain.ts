@@ -2,20 +2,20 @@ import { OnChainVerification, WalletState } from '../types';
 import { generateTxHash } from './crypto';
 
 export const BOTCHAIN_CONFIG = {
-  chainId: 8807,
-  chainIdHex: '0x2267',
+  chainId: 968,
+  chainIdHex: '0x3c8',
   chainName: 'BOTChain Testnet',
   nativeCurrency: {
-    name: 'BOT Token',
+    name: 'BOT',
     symbol: 'BOT',
     decimals: 18,
   },
-  rpcUrls: ['https://rpc-testnet.botchain.network'],
-  blockExplorerUrls: ['https://explorer.botchain.network'],
+  rpcUrls: ['https://rpc.bohr.life'],
+  blockExplorerUrls: ['https://explorer.bohr.life'],
   contractAddress: '0x7B891A4089c16Fe9e18b6dB390F8e3a2414A0b88',
 };
 
-let currentBlockHeight = 14892304;
+let currentBlockHeight = 23922818;
 
 export class BotchainService {
   private static instance: BotchainService;
@@ -139,7 +139,45 @@ export class BotchainService {
   }
 
   /**
-   * Connects creator's Web3 wallet via MetaMask
+   * Prompts wallet to switch to BOTChain Testnet (Chain ID 968 / 0x3c8)
+   */
+  public async switchOrAddNetwork(): Promise<boolean> {
+    if (typeof window === 'undefined' || !(window as any).ethereum) return false;
+    const ethereum = (window as any).ethereum;
+    try {
+      await ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: BOTCHAIN_CONFIG.chainIdHex }],
+      });
+      return true;
+    } catch (switchError: any) {
+      if (switchError?.code === 4902 || switchError?.data?.originalError?.code === 4902) {
+        try {
+          await ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [
+              {
+                chainId: BOTCHAIN_CONFIG.chainIdHex,
+                chainName: BOTCHAIN_CONFIG.chainName,
+                nativeCurrency: BOTCHAIN_CONFIG.nativeCurrency,
+                rpcUrls: BOTCHAIN_CONFIG.rpcUrls,
+                blockExplorerUrls: BOTCHAIN_CONFIG.blockExplorerUrls,
+              },
+            ],
+          });
+          return true;
+        } catch (addError) {
+          console.error('Failed to add BOTChain network to wallet:', addError);
+          return false;
+        }
+      }
+      console.error('Failed to switch to BOTChain network:', switchError);
+      return false;
+    }
+  }
+
+  /**
+   * Connects creator's Web3 wallet via MetaMask and ensures Chain ID 968 (0x3c8)
    */
   public async connectWallet(): Promise<WalletState> {
     this.walletState.isConnecting = true;
@@ -156,6 +194,11 @@ export class BotchainService {
           try {
             const chainIdHex = await ethereum.request({ method: 'eth_chainId' });
             chainId = parseInt(chainIdHex, 16);
+            if (chainId !== BOTCHAIN_CONFIG.chainId) {
+              await this.switchOrAddNetwork();
+              const updatedChainIdHex = await ethereum.request({ method: 'eth_chainId' });
+              chainId = parseInt(updatedChainIdHex, 16);
+            }
           } catch {}
 
           this.walletState = {

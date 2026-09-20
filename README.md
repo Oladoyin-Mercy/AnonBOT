@@ -25,6 +25,14 @@
 - **Crypto Engine**: WebCrypto SHA-256 digest computation & real-time hash verification.
 - **Web3 Connector**: Injected provider support (MetaMask, OKX, Rabby) + simulated high-performance BOTChain local node.
 
+## 🌐 Network Configuration (BOTChain Testnet)
+
+- **Network Name**: BOTChain Testnet
+- **Chain ID**: `968` (Hex: `0x3c8`)
+- **RPC Endpoint**: `https://rpc.bohr.life`
+- **Native Currency**: `BOT` (18 Decimals)
+- **Contract Address**: `0x7B891A4089c16Fe9e18b6dB390F8e3a2414A0b88`
+
 ---
 
 ## 🚀 Getting Started
