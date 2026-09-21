@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "node tests/test-core.mjs"
+    "test": "node tests/test-core.mjs",
+    "deploy:contract": "node scripts/deploy.js"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -24,7 +25,10 @@
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
+    "dotenv": "^18.0.1",
+    "ethers": "^6.17.0",
     "postcss": "^8.4.49",
+    "solc": "^0.8.20",
     "tailwindcss": "^3.4.16",
     "typescript": "~5.6.2",
     "vite": "^6.0.1"

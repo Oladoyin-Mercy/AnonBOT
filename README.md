@@ -31,7 +31,7 @@
 - **Chain ID**: `968` (Hex: `0x3c8`)
 - **RPC Endpoint**: `https://rpc.bohr.life`
 - **Native Currency**: `BOT` (18 Decimals)
-- **Contract Address**: `0x7B891A4089c16Fe9e18b6dB390F8e3a2414A0b88`
+- **Contract Address**: `0xef5a9e1c3e650de09d740ccba0f4b70f2dce8968`
 
 ---
 

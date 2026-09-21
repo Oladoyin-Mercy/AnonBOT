@@ -12,7 +12,7 @@ export const BOTCHAIN_CONFIG = {
   },
   rpcUrls: ['https://rpc.bohr.life'],
   blockExplorerUrls: ['https://explorer.bohr.life'],
-  contractAddress: '0x7B891A4089c16Fe9e18b6dB390F8e3a2414A0b88',
+  contractAddress: '0xef5a9e1c3e650de09d740ccba0f4b70f2dce8968',
 };
 
 let currentBlockHeight = 23922818;
