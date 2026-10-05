@@ -133,11 +133,18 @@ export class StorageService {
     const roomId = `${cleanTitle || 'room'}-${randomSuffix}`;
 
     const now = Date.now();
-    const expiresAt = params.expirationHours && params.expirationHours > 0
-      ? now + params.expirationHours * 60 * 60 * 1000
-      : undefined;
+    const durationSeconds = params.expirationHours && params.expirationHours > 0
+      ? params.expirationHours * 3600
+      : 0;
+    const expiresAt = durationSeconds > 0 ? now + durationSeconds * 1000 : undefined;
 
-    await botchainService.anchorRoomCreation(roomId, params.creatorAddress);
+    await botchainService.anchorRoomCreation({
+      roomId,
+      title: params.title.trim(),
+      question: params.question.trim(),
+      durationSeconds,
+      allowMultiple: params.allowMultiple,
+    });
 
     const newRoom: FeedbackRoom = {
       id: roomId,
@@ -214,12 +221,13 @@ export class StorageService {
       timestamp
     );
 
-    const verification = await botchainService.anchorFeedbackToBotchain(
-      params.roomId,
-      params.anonymousId,
+    const verification = await botchainService.anchorFeedbackToBotchain({
+      roomId: params.roomId,
+      anonymousId: params.anonymousId,
       payloadHash,
-      timestamp
-    );
+      category: params.category,
+      timestamp,
+    });
 
     const newFeedback: AnonymousFeedback = {
       id: `fb-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,

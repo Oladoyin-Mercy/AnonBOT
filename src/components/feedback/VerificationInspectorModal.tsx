@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal } from '../ui/Modal';
 import { AnonymousFeedback } from '../../types';
 import { verifyPayloadIntegrity } from '../../services/crypto';
-import { Copy, Check, ShieldCheck, ChevronDown } from 'lucide-react';
+import { Copy, Check, ShieldCheck, ChevronDown, ExternalLink } from 'lucide-react';
 import { useToast } from '../ui/Toast';
 
 interface VerificationInspectorModalProps {
@@ -108,9 +108,16 @@ export const VerificationInspectorModal: React.FC<VerificationInspectorModalProp
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 pb-2 border-b border-white/[0.04]">
             <span className="text-ink-secondary font-sans">Transaction Hash</span>
             <div className="flex items-center gap-2">
-              <span className="text-ink-primary" title={feedback.verification.transactionHash}>
-                {truncate(feedback.verification.transactionHash, 14, 10)}
-              </span>
+              <a
+                href={`https://scan.bohr.life/tx/${feedback.verification.transactionHash}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-botchain hover:underline flex items-center gap-1"
+                title={feedback.verification.transactionHash}
+              >
+                <span>{truncate(feedback.verification.transactionHash, 14, 10)}</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
               <button
                 type="button"
                 onClick={() => copyToClipboard(feedback.verification.transactionHash, 'tx')}
